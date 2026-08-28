@@ -17,10 +17,11 @@ interface SidebarProps {
   isCompiling: boolean;
   compileStep: number;
   template: TemplateData;
+  hasCompilation?: boolean;
   onNavigate: (screen: Screen) => void;
 }
 
-export default function Sidebar({ currentScreen, isCompiling, compileStep, template, onNavigate }: SidebarProps) {
+export default function Sidebar({ currentScreen, isCompiling, compileStep, template, hasCompilation = false, onNavigate }: SidebarProps) {
   if (currentScreen === 'compiler') {
     return (
       <aside className="hidden lg:flex w-[282px] flex-col border-r border-[#152538] bg-[#030d19]/90 backdrop-blur-md sticky top-16 h-[calc(100vh-64px)] overflow-y-auto p-6 shrink-0 select-none custom-scrollbar shadow-[4px_0_24px_rgba(0,0,0,0.3)]">
@@ -50,7 +51,7 @@ export default function Sidebar({ currentScreen, isCompiling, compileStep, templ
                   Lexical Analysis
                 </p>
                 <p className="text-[10px] text-[#908fa0] font-mono">
-                  {compileStep >= 1 && !isCompiling ? 'Complete • 14ms' : isCompiling && compileStep === 1 ? 'Analyzing token stream...' : 'Waiting'}
+                  {compileStep >= 1 && !isCompiling ? 'Complete' : isCompiling ? 'COMPILING…' : 'Waiting'}
                 </p>
               </div>
             </div>
@@ -78,7 +79,7 @@ export default function Sidebar({ currentScreen, isCompiling, compileStep, templ
                   Schema Generation
                 </p>
                 <p className="text-[10px] text-[#908fa0] font-mono">
-                  {compileStep >= 2 && !isCompiling ? 'Ready' : isCompiling && compileStep === 2 ? 'Generating Schemas...' : 'Waiting'}
+                  {compileStep >= 2 && !isCompiling ? 'Complete' : isCompiling ? 'COMPILING…' : 'Waiting'}
                 </p>
               </div>
             </div>
@@ -106,7 +107,7 @@ export default function Sidebar({ currentScreen, isCompiling, compileStep, templ
                   Validation Layer
                 </p>
                 <p className="text-[10px] text-[#908fa0] font-mono">
-                  {compileStep >= 3 && !isCompiling ? 'Complete' : isCompiling && compileStep === 3 ? 'Validating integrity...' : 'Waiting'}
+                  {compileStep >= 3 && !isCompiling ? 'Complete' : isCompiling ? 'COMPILING…' : 'Waiting'}
                 </p>
               </div>
             </div>
@@ -133,7 +134,7 @@ export default function Sidebar({ currentScreen, isCompiling, compileStep, templ
                   Code Emission
                 </p>
                 <p className="text-[10px] text-[#908fa0] font-mono">
-                  {compileStep >= 4 && !isCompiling ? 'Finished' : isCompiling && compileStep === 4 ? 'Emitting codebases...' : 'Waiting'}
+                  {compileStep >= 4 && !isCompiling ? 'Complete' : isCompiling ? 'COMPILING…' : 'Waiting'}
                 </p>
               </div>
             </div>
@@ -203,11 +204,11 @@ export default function Sidebar({ currentScreen, isCompiling, compileStep, templ
             <h3 className="font-label-caps text-[10px] text-[#908fa0] mb-4 tracking-widest font-bold">METRICS</h3>
             <div className="grid grid-cols-1 gap-3">
               <div className="bg-[#071424] p-4 rounded-xl border border-[#1a2d3e] hover:border-[#1e324c] transition-colors shadow">
-                <div className="font-display-md text-xl text-[#c0c1ff] font-extrabold tracking-tight">{template?.inferenceTime || '1.2s'}</div>
+                <div className="font-display-md text-xl text-[#c0c1ff] font-extrabold tracking-tight">{hasCompilation && template?.inferenceTime ? template.inferenceTime : '—'}</div>
                 <div className="font-label-caps text-[9px] text-[#908fa0] tracking-wider mt-1">INFERENCE LATENCY</div>
               </div>
               <div className="bg-[#071424] p-4 rounded-xl border border-[#1a2d3e] hover:border-[#1e324c] transition-colors shadow">
-                <div className="font-display-md text-xl text-[#d4e4fa] font-extrabold tracking-tight">{template?.tokensUsed || '842'}</div>
+                <div className="font-display-md text-xl text-[#d4e4fa] font-extrabold tracking-tight">{hasCompilation && template?.tokensUsed ? template.tokensUsed.toLocaleString() : '—'}</div>
                 <div className="font-label-caps text-[9px] text-[#908fa0] tracking-wider mt-1">TOKENS EMITTED</div>
               </div>
             </div>

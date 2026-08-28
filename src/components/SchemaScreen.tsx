@@ -85,7 +85,7 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
           `[${timestamp}] [BILLING] Injecting verified cents parameters (USD 99.00)`,
           `[${timestamp}] [STRIPE_SIGN] Generating transient verification fingerprint token...`,
           `[${timestamp}] [STRIPE_DEV] Webhook event received: "checkout.session.completed"`,
-          `[${timestamp}] [STATUS] Stripe workflow simulation compiled with zero memory leak.`
+          `[${timestamp}] [STATUS] This is a local UI simulation; no runtime verification was performed.`
         ];
       }
 
@@ -179,8 +179,8 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
             <CheckCircle2 className="h-5 w-5" />
           </div>
           <div>
-            <p className="text-white font-extrabold text-sm tracking-tight leading-none">Deployment Success</p>
-            <p className="text-[11px] text-[#c7c4d7] mt-1.5 leading-relaxed">Emitted AST properties for {selectedTemplate.name} successfully pushed to the dynamic server sandbox.</p>
+            <p className="text-white font-extrabold text-sm tracking-tight leading-none">Configuration prepared</p>
+            <p className="text-[11px] text-[#c7c4d7] mt-1.5 leading-relaxed">Generated configuration for {selectedTemplate.name} is ready to export. No deployment was performed.</p>
           </div>
         </div>
       )}
@@ -196,8 +196,8 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
           <label className="font-label-caps text-[9px] text-[#908fa0] flex items-center gap-2 font-bold select-none">
             VER STATUS:
             <select className="bg-[#051424] border border-[#1e2d3d] rounded px-2.5 py-1 text-[#c0c1ff] font-sans font-extrabold text-[9px] cursor-pointer focus:outline-none focus:border-[#8083ff]/40">
-              <option className="bg-[#051424]">REPAIRED_INTEGRITY_v1.0</option>
-              <option className="bg-[#051424]">RAW_PRE_VALID_STAGE</option>
+              <option className="bg-[#051424]">Derived from latest compilation</option>
+              <option className="bg-[#051424]">Reference template</option>
             </select>
           </label>
         </div>

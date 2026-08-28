@@ -32,10 +32,10 @@ export interface TemplateData {
   optimizationFlags: string[];
   pipelineOutputJson: string;
   
-  // Validation Report
-  jsonSchemaValid: boolean;
-  typeSafetyCompliant: boolean;
-  consistencyStatus: string; // e.g., "REPAIRED (2)" or "SYNCED"
+  // Reference-template metadata. Latest compilation results use CompilationResult.
+  validation: { valid: boolean; errors: string[]; warnings: string[] };
+  typeSafetyChecked: boolean;
+  consistencyStatus: 'SYNCED' | 'REPAIRED' | 'VALIDATION_FAILED' | 'NOT_RUN';
   repairLog?: string;
   
   // Resource Metrics
@@ -103,9 +103,9 @@ export const GOLD_TEMPLATES: Record<string, TemplateData> = {
   ],
   "optimization_flags": ["PREFETCH_L3", "PII_MASK"]
 }`,
-    jsonSchemaValid: true,
-    typeSafetyCompliant: true,
-    consistencyStatus: "REPAIRED (0x2A)",
+    validation: { valid: true, errors: [], warnings: [] },
+    typeSafetyChecked: false,
+    consistencyStatus: "NOT_RUN",
     repairLog: "Implicit mapping conflict in line 12. Corrected item.desc to item.description based on API Schema sync.",
     inferenceTime: "1.2s",
     tokensUsed: 842,
@@ -219,8 +219,8 @@ condition:
   ],
   "optimization_flags": ["STATE_RECONCILE"]
 }`,
-    jsonSchemaValid: true,
-    typeSafetyCompliant: true,
+    validation: { valid: true, errors: [], warnings: [] },
+    typeSafetyChecked: false,
     consistencyStatus: "SYNCED",
     inferenceTime: "0.95s",
     tokensUsed: 620,
@@ -329,9 +329,9 @@ condition:
   ],
   "optimization_flags": ["ST_CONSISTENCY"]
 }`,
-    jsonSchemaValid: true,
-    typeSafetyCompliant: true,
-    consistencyStatus: "REPAIRED (1)",
+    validation: { valid: true, errors: [], warnings: [] },
+    typeSafetyChecked: false,
+    consistencyStatus: "NOT_RUN",
     repairLog: "Standardized tax estimation parameter. Consolidated cart.total with subtotal + dynamic tax.",
     inferenceTime: "1.4s",
     tokensUsed: 1205,
@@ -447,8 +447,8 @@ condition:
   ],
   "optimization_flags": ["OPTIMISTIC_LOCK", "DOUBLE_ENTRY_CHECK"]
 }`,
-    jsonSchemaValid: true,
-    typeSafetyCompliant: true,
+    validation: { valid: true, errors: [], warnings: [] },
+    typeSafetyChecked: false,
     consistencyStatus: "SYNCED",
     inferenceTime: "1.82s",
     tokensUsed: 1540,

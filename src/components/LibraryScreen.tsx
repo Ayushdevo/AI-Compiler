@@ -253,11 +253,11 @@ export default function LibraryScreen() {
         <div>
           <div className="flex items-center gap-2 text-[#8083ff] font-bold text-xs font-mono uppercase tracking-widest mb-1">
             <Layers className="w-4 h-4" />
-            BENCHMARK WORKFLOW SYSTEM
+            REFERENCE BENCHMARK DATASET
           </div>
           <h2 className="font-display-lg text-3xl font-extrabold text-[#d4e4fa] tracking-tight">Dataset Evaluation Matrix</h2>
           <p className="text-body-md text-xs text-[#908fa0] max-w-2xl mt-1 leading-relaxed">
-            Verify system resilience under distinct architectural presets or evaluate semantic repairs against complex edge cases.
+            Reference templates and historical benchmark examples. Their latency and success-rate values are not metrics for the latest compilation.
           </p>
         </div>
         
