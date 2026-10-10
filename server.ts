@@ -446,7 +446,9 @@ app.get('/api/health', (_req, res) => {
  * Final Output
  */
 app.post('/api/generate', async (req, res) => {
-  const { prompt } = req.body;
+  // express.json() leaves req.body undefined for requests without a JSON body.
+  // Reject these as client errors instead of throwing before the handler's try/catch.
+  const prompt = req.body?.prompt;
 
   if (!prompt || typeof prompt !== 'string') {
     return res.status(400).json({
