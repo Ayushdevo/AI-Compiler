@@ -3,4 +3,5 @@
   "description": "Interactive AI-powered web app schema compiler, pipeline metrics dashboard, permissions matrix tracker, and dataset test library.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "adaptation":[],
 }
