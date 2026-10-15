@@ -15,7 +15,7 @@ const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.5-flash';
 /**
  * Gemini client
  */
-let aiClient: GoogleGenAI | null = null;
+let aiClient: openaicli | null = null;
 
 function getGeminiClient(): GoogleGenAI | null {
   if (!aiClient) {
