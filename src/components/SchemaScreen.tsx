@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { simulationLog } from '../simulation';
 import { 
   Check, 
   Copy,
@@ -31,67 +32,16 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
   const [copiedCodeFlag, setCopiedCodeFlag] = useState(false);
   const [copiedConfigFlag, setCopiedConfigFlag] = useState(false);
 
-  // Secure local runtime execution simulator
   const [sandboxLogs, setSandboxLogs] = useState<string[]>([
-    "// CORE RUNTIME READY: NO_ERRORS_DETECTION",
-    "// Select an operation below to mount & execute compiled structures."
+    'Simulation examples only. No runtime checks have been performed.',
   ]);
   const [isSandboxTesting, setIsSandboxTesting] = useState(false);
 
   const runSandboxTest = (action: 'db' | 'api' | 'auth' | 'stripe') => {
     if (isSandboxTesting) return;
     setIsSandboxTesting(true);
-    setSandboxLogs(prev => [...prev, `\n> RUNNING VIRTUALIZED SANDBOX PAYLOAD: ${action.toUpperCase()}_TEST...`]);
-
-    setTimeout(() => {
-      let runSteps: string[] = [];
-      const timestamp = new Date().toLocaleTimeString();
-      const entityLabel = selectedTemplate.name || "AppEntity";
-
-      if (action === 'db') {
-        runSteps = [
-          `[${timestamp}] [SYS-COMPILER] Analyzing emitted DDL tables...`,
-          `[${timestamp}] [PostgresL3] Validated model fields mapping matching API structures`,
-          `[${timestamp}] [SQL_LOG] Executing: CREATE TABLE IF NOT EXISTS ${entityLabel.toLowerCase()} (`,
-          `   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),`,
-          `   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),`,
-          `   status VARCHAR(50) DEFAULT 'draft'`,
-          `);`,
-          `[${timestamp}] [SQL_LOG] Applied foreign key bindings smoothly. Constraint verification: 15ms.`,
-          `[${timestamp}] [STATUS] SCHEMA INTEGRITY VERIFICATION SUCCEEDED.`
-        ];
-      } else if (action === 'api') {
-        runSteps = [
-          `[${timestamp}] [SYS-COMPILER] Parsing FastAPI router definitions...`,
-          `[${timestamp}] [FastAPI] Mounting dynamic parameters endpoint POST /api/v1/${entityLabel.toLowerCase()}`,
-          `[${timestamp}] [TEST-INITIATED] Sending test mock record payload matching model fields...`,
-          `[${timestamp}] [PAYLOAD] { "status": "active", "created_by": "admin-01" }`,
-          `[${timestamp}] [FastAPI] Responded with Status Code: 200 OK.`,
-          `[${timestamp}] [STATUS] CLIENT ROUTING INTERFACE INTEGRATION SECURE.`
-        ];
-      } else if (action === 'auth') {
-        runSteps = [
-          `[${timestamp}] [SYS-COMPILER] Parsing active security policy parameters...`,
-          `[${timestamp}] [YAML_GATE] Initializing interceptor check...`,
-          `[${timestamp}] [AUTH_LOG] Routing request to: GET /api/v1/${entityLabel.toLowerCase()}`,
-          `[${timestamp}] [AUTH_LOG] Target credentials matches role "${selectedRole.toUpperCase()}"`,
-          `[${timestamp}] [AUTH_LOG] Gating validation policy matched strictly!`,
-          `[${timestamp}] [YAML_GATE] Decision -> ${selectedRole === 'guest' ? 'RESTRICTED (READ-ONLY)' : 'AUTHORIZED (CRUD)'}`,
-          `[${timestamp}] [STATUS] TENANT SHIELD VALIDATION VERIFIED.`
-        ];
-      } else if (action === 'stripe') {
-        runSteps = [
-          `[${timestamp}] [SYS-COMPILER] Scoped Stripe checkout hooks...`,
-          `[${timestamp}] [BILLING] Injecting verified cents parameters (USD 99.00)`,
-          `[${timestamp}] [STRIPE_SIGN] Generating transient verification fingerprint token...`,
-          `[${timestamp}] [STRIPE_DEV] Webhook event received: "checkout.session.completed"`,
-          `[${timestamp}] [STATUS] This is a local UI simulation; no runtime verification was performed.`
-        ];
-      }
-
-      setSandboxLogs(prev => [...prev, ...runSteps]);
-      setIsSandboxTesting(false);
-    }, 1000);
+    setSandboxLogs(prev => [...prev, ...simulationLog(action)]);
+    setIsSandboxTesting(false);
   };
 
   // Read code content depending on selected tab
@@ -338,7 +288,7 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
                 <div className="flex items-center justify-between mb-5 select-none pb-3 border-b border-[#1c2b3c]">
                   <div className="flex flex-col">
                     <h2 className="font-display-md text-base font-extrabold text-white">Grid Policy Controls</h2>
-                    <p className="text-[11px] text-[#908fa0] mt-0.5">Toggle row-level capabilities emitted onto JWT tokens.</p>
+                    <p className="text-[11px] text-[#908fa0] mt-0.5">Edit the displayed policy grid; changes are not deployed.</p>
                   </div>
                   <span className="font-label-caps text-[9px] font-black bg-[#6265f0]/15 text-[#c0c1ff] px-3 py-1 rounded-full border border-[#8083ff]/25 uppercase tracking-wider">
                     ROLE: {selectedRole}
@@ -432,32 +382,7 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
                 </div>
               </section>
 
-              {/* Status block row info */}
-              <section className="grid grid-cols-1 md:grid-cols-3 gap-4 select-none">
-                <div className="bg-[#071424] p-4.5 rounded-2xl border border-[#1e2d3d] flex flex-col items-center justify-center text-center shadow">
-                  <span className="font-label-caps text-[9px] text-[#908fa0] mb-1.5">INTEGRITY REPORT</span>
-                  <span className="text-sm text-emerald-400 font-extrabold flex items-center gap-1">100% SECURE</span>
-                  <div className="w-full h-1 bg-[#152538] rounded-full mt-3 overflow-hidden">
-                    <div className="w-full h-full bg-emerald-500" />
-                  </div>
-                </div>
-
-                <div className="bg-[#071424] p-4.5 rounded-2xl border border-[#1e2d3d] flex flex-col items-center justify-center text-center shadow">
-                  <span className="font-label-caps text-[9px] text-[#908fa0] mb-1.5">API REST COHESION</span>
-                  <span className="text-sm text-emerald-400 font-extrabold">COMPLIANT</span>
-                  <div className="w-full h-1 bg-[#152538] rounded-full mt-3 overflow-hidden">
-                    <div className="w-full h-full bg-emerald-400" />
-                  </div>
-                </div>
-
-                <div className="bg-[#071424] p-4.5 rounded-2xl border border-[#1e2d3d] flex flex-col items-center justify-center text-center shadow">
-                  <span className="font-label-caps text-[9px] text-[#908fa0] mb-1.5">POSTGRES DDL SYNC</span>
-                  <span className="text-sm text-amber-500 font-extrabold">EMITTED</span>
-                  <div className="w-full h-1 bg-[#152538] rounded-full mt-3 overflow-hidden">
-                    <div className="w-4/5 h-full bg-amber-500" />
-                  </div>
-                </div>
-              </section>
+              <p className="text-xs text-[#908fa0]">Policy and runtime behavior have not been verified by this view.</p>
             </div>
           )}
         </div>
@@ -465,7 +390,7 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
         {/* Right Panel: Schema Sandbox Simulator section */}
         <div className="hidden xl:flex flex-col w-96 border-l border-[#152538] bg-[#030d19]/90 backdrop-blur-md shrink-0 p-5 space-y-5 overflow-y-auto custom-scrollbar select-none">
           <div className="border-b border-[#1c2b3c] pb-3.5 flex justify-between items-center">
-            <span className="font-label-caps text-[10px] text-white tracking-widest font-black">LOCAL HYPERTHREAD SANDBOX</span>
+            <span className="font-label-caps text-[10px] text-white tracking-widest font-black">SIMULATION EXAMPLES</span>
             <Terminal className="h-4 w-4 text-[#8083ff]" />
           </div>
 
@@ -474,10 +399,10 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
               <div className="bg-[#071424] p-4.5 rounded-2xl border border-[#1e2d3d] space-y-3 shadow shadow-black/10">
                 <h4 className="font-label-caps text-[9px] text-emerald-400 flex items-center gap-1.5 font-black">
                   <Activity className="h-3.5 w-3.5" />
-                  RUN REPL SIMULATORS
+                  VIEW EXAMPLES
                 </h4>
                 <p className="text-[11px] text-[#908fa0] leading-relaxed">
-                  Interactively mock database, routers, check permissions levels, and Stripe cent hooks against our live server memory context.
+                  These examples do not execute generated code or test a live service.
                 </p>
                 
                 {/* Simulator Buttons */}
@@ -520,10 +445,10 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
               {/* Terminal Frame */}
               <div className="flex-1 flex flex-col bg-black border border-[#1c2b3c] rounded-2xl overflow-hidden font-mono text-[10px] shadow-lg">
                 <div className="bg-[#090b11] border-b border-[#1c2b3c] px-3.5 py-2 flex justify-between items-center text-[#465a73] font-bold tracking-wider font-mono select-none">
-                  <span>SYSTEM_REPL.sh</span>
+                  <span>SIMULATION LOG</span>
                   <div className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[8px] font-sans">LIVE</span>
+                    <span className="text-[8px] font-sans">EXAMPLE</span>
                   </div>
                 </div>
                 <div className="p-4 flex-1 overflow-y-auto custom-scrollbar space-y-2 text-emerald-400 select-text leading-relaxed font-mono bg-black">
@@ -542,7 +467,7 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
                   ))}
                   {isSandboxTesting && (
                     <div className="text-amber-400 animate-pulse font-mono font-bold text-[11px]">
-                      [SYS_LOAD] Executing REPL instruction...
+                      Preparing example...
                     </div>
                   )}
                 </div>
@@ -555,7 +480,7 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
                 className="w-full bg-gradient-to-r from-[#6265f0] to-[#8083ff] text-white font-label-caps text-xs py-3.5 rounded-xl hover:brightness-110 active:scale-97 transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#8083ff]/15 cursor-pointer font-black"
               >
                 <Rocket className="h-4 w-4 animate-bounce" />
-                PUSH ACTIVE CONFIG TO RUNTIME
+                PREPARE CONFIGURATION
               </button>
               
               <div className="grid grid-cols-2 gap-2">
