@@ -15,7 +15,7 @@ const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.5-flash';
 /**
  * Gemini client
  */
-let aiClient: openaicli | null = null;
+let aiClient: GoogleGenAI | null = null;
 
 function getGeminiClient(): GoogleGenAI | null {
   if (!aiClient) {
@@ -1258,7 +1258,7 @@ function simulateCompilation(prompt: string) {
  */
 if (process.env.NODE_ENV !== 'production') {
   app.post('/api/simulate', (req, res) => {
-    const { prompt } = req.body;
+    const prompt = req.body?.prompt;
 
     if (!prompt || typeof prompt !== 'string') {
       return res.status(400).json({
