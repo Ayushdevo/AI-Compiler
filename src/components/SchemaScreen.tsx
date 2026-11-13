@@ -273,22 +273,14 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
               <div className="flex-1 p-4 md:p-6 font-mono text-[12.5px] text-[#d4e4fa] overflow-auto select-text leading-relaxed bg-[#020b14]">
                 <table className="w-full">
                   <tbody>
-                    {getActiveCode().split('\n').map((line, index) => {
-                      // Custom AST syntax highlighters for aesthetics
-                      let highlightedStr = line
-                        .replace(/import|from|export|default|function|return|class|def|async|CREATE TABLE|PRIMARY KEY|FOREIGN KEY|REFERENCES|CHECK|IF NOT EXISTS/g, (match) => `<span class="text-[#c0c1ff] font-bold">${match}</span>`)
-                        .replace(/'[^']*'|"[^"]*"/g, (match) => `<span class="text-emerald-400 font-medium">${match}</span>`)
-                        .replace(/\/\/.*|#.*/g, (match) => `<span class="text-[#465a73] italic">${match}</span>`);
-
-                      return (
-                        <tr key={index} className="hover:bg-[#122131]/30 font-mono">
-                          <td className="text-right text-[#34485f] select-none pr-5 w-8 font-mono text-[11px] border-r border-[#152538]">
-                            {index + 1}
-                          </td>
-                          <td className="pl-5 font-mono whitespace-pre" dangerouslySetInnerHTML={{ __html: highlightedStr }} />
-                        </tr>
-                      );
-                    })}
+                    {getActiveCode().split('\n').map((line, index) => (
+                      <tr key={index} className="hover:bg-[#122131]/30 font-mono">
+                        <td className="text-right text-[#34485f] select-none pr-5 w-8 font-mono text-[11px] border-r border-[#152538]">
+                          {index + 1}
+                        </td>
+                        <td className="pl-5 font-mono whitespace-pre">{line}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -418,17 +410,12 @@ export default function SchemaScreen({ selectedTemplate, setTemplate }: SchemaSc
                   </div>
                 </div>
                 <div className="p-5 font-mono text-xs md:text-[13px] leading-relaxed text-[#d4e4fa] select-text bg-[#020b14]">
-                  {(selectedTemplate.authSchemaYaml || '').split('\n').map((line, index) => {
-                    let coloredLine = line
-                      .replace(/policy|action|condition|if|match|with|grant/g, match => `<span class="text-[#c0c1ff] font-bold">${match}</span>`)
-                      .replace(/"[^"]*"/g, match => `<span class="text-emerald-400">${match}</span>`);
-                    return (
-                      <div key={index} className="flex hover:bg-[#122131]/20 py-0.5">
-                        <span className="text-[#3c4e62] w-8 shrink-0 select-none font-mono text-[10px] border-r border-[#152538] pr-2.5 text-right">{index + 1}</span>
-                        <div className="pl-4.5 font-mono" dangerouslySetInnerHTML={{ __html: coloredLine }} />
-                      </div>
-                    );
-                  })}
+                  {(selectedTemplate.authSchemaYaml || '').split('\n').map((line, index) => (
+                    <div key={index} className="flex hover:bg-[#122131]/20 py-0.5">
+                      <span className="text-[#3c4e62] w-8 shrink-0 select-none font-mono text-[10px] border-r border-[#152538] pr-2.5 text-right">{index + 1}</span>
+                      <div className="pl-4.5 font-mono whitespace-pre-wrap">{line}</div>
+                    </div>
+                  ))}
                 </div>
               </section>
 
