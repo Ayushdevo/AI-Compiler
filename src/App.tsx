@@ -59,7 +59,7 @@ interface ApiResponse {
  *   pipelineOutputJson: "..."
  * }
  */
-function normalizeCompilationResult(
+export function normalizeCompilationResult(
   response: ApiResponse
 ): CompilationResult | null {
 
@@ -69,9 +69,16 @@ function normalizeCompilationResult(
       ? response.data
       : response;
 
-  if (!raw || typeof raw !== 'object') {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
     return null;
   }
+
+  // Do not turn an empty or unrelated success response into a fake result.
+  const json = raw.pipelineOutputJson ?? raw.pipeline_output_json;
+  const ir = raw.pipelineOutput ?? raw.ir;
+  const hasJson = typeof json === 'string' && json.trim().length > 0;
+  const hasIr = ir && typeof ir === 'object' && !Array.isArray(ir) && Object.keys(ir).length > 0;
+  if (!hasJson && !hasIr) return null;
 
   /*
    * Some backend versions may return metrics in slightly
