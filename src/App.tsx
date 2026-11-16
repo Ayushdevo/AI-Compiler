@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { compilationPermissions } from './permissions';
 
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -500,8 +501,11 @@ export default function App() {
 
       setCompilationResult(result);
 
+      const returnedTemplate = extractTemplate(json);
+
       setTemplate((current) => ({
         ...current,
+        ...(returnedTemplate ?? {}),
         id: result.id,
         name: result.name,
         prompt: result.prompt,
@@ -519,20 +523,8 @@ export default function App() {
         apiSchemaCode: result.apiSchemaCode,
         dbSchemaCode: result.dbSchemaCode,
         authSchemaYaml: result.authSchemaYaml,
+        permissions: compilationPermissions(result.permissions),
       }));
-
-
-      /*
-       * Keep template state compatible with the rest of the
-       * application if the backend provides template data.
-       */
-      const returnedTemplate =
-        extractTemplate(json);
-
-
-      if (returnedTemplate) {
-        setTemplate(returnedTemplate);
-      }
 
 
       /* ------------------------------------------------------
