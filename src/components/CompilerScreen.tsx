@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { JsonLines } from './JsonLines';
 import {
   Bolt,
   Copy,
@@ -210,46 +211,7 @@ export default function CompilerScreen({
           2
         );
 
-      return pretty
-        .split('\n')
-        .map((line, index) => {
-          const highlighted =
-            line
-              .replace(
-                /"([^"]+)":/g,
-                '<span class="text-[#c0c1ff] font-semibold">"$1"</span>:'
-              )
-              .replace(
-                /: "([^"]*)"/g,
-                ': <span class="text-emerald-400">"$1"</span>'
-              )
-              .replace(
-                /: (true|false|null)/g,
-                ': <span class="text-amber-400 font-bold">$1</span>'
-              )
-              .replace(
-                /: (-?\d+(\.\d+)?)/g,
-                ': <span class="text-amber-400 font-bold">$1</span>'
-              );
-
-          return (
-            <div
-              key={index}
-              className="flex hover:bg-[#122131]/20 font-mono py-0.5"
-            >
-              <span className="w-10 shrink-0 select-none text-right text-[#465a73] pr-4 text-xs border-r border-[#152538]">
-                {index + 1}
-              </span>
-
-              <span
-                className="pl-4 text-xs whitespace-pre-wrap"
-                dangerouslySetInnerHTML={{
-                  __html: highlighted,
-                }}
-              />
-            </div>
-          );
-        });
+      return <JsonLines text={pretty} />;
     } catch {
       return (
         <pre className="font-mono text-xs text-[#d4e4fa] whitespace-pre-wrap">
