@@ -69,12 +69,15 @@ async function generateWithRetry(
         error?.error?.message ??
         String(error);
 
+      const statusCode = typeof status === 'string' && /^\d{3}$/.test(status)
+        ? Number(status)
+        : status;
       const retryable =
-        status === 429 ||
-        status === 500 ||
-        status === 502 ||
-        status === 503 ||
-        status === 504 ||
+        statusCode === 429 ||
+        statusCode === 500 ||
+        statusCode === 502 ||
+        statusCode === 503 ||
+        statusCode === 504 ||
         /UNAVAILABLE|high demand|overloaded|temporarily unavailable|rate limit/i.test(
           message
         );
